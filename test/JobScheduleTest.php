@@ -35,4 +35,18 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($actualJobSchedule, "array should be <empty>");
 
     }
+
+    // test to check a single job can be added to the jobSchedule
+    public function testSingleJobIsAddedToJobSchedule()
+    {
+        $jobSchedule = new JobSchedule("a => ");
+        $jobSchedule->organiseJobSchedule();
+        $actualJobSchedule = $jobSchedule->getSchedule();
+
+        // the schedule should be an array with 1 element, which should be "a"
+        $this->assertInternalType('array',$actualJobSchedule);
+        $this->assertEquals(1, count($actualJobSchedule), "array should have <1 element>");
+        $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
+
+    }
 }
