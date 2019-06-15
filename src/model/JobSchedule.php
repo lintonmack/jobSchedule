@@ -42,16 +42,20 @@ class JobSchedule
 
         // use regex to separate job letter from the string and add to the array $filteredListOfJobs
         $filteredListOfJobs = array();
-        preg_match_all("/[a-z]\s=>\s([a-z]||\s)/", $this->unorderedListOfJobs, $filteredListOfJobs);
+        preg_match_all("/([a-z]\s=>)|([a-z]\s=>\s([a-z]||\s))/", $this->unorderedListOfJobs, $filteredListOfJobs);
 
-        // remove additional characters to shorten the length of the string to just the job character.
-        $filteredListOfJobs[0][0] = str_replace(" =>", "", $filteredListOfJobs[0][0]);
-        $filteredListOfJobs[0][0] = preg_replace("/\s+/", "", $filteredListOfJobs[0][0]);
+        // loop over the jobsToSchedule in the $filteredListOfJobs
 
-        // add to array and return
-        $this->schedule[] = $filteredListOfJobs[0][0];
+        foreach ($filteredListOfJobs[0] as $jobsToSchedule) {
+
+            // remove additional characters to shorten the length of the string to just the job character.
+            $jobsToSchedule = str_replace(" =>", "", $jobsToSchedule);
+            $jobsToSchedule = preg_replace("/\s+/", "", $jobsToSchedule);
+            $this->schedule[] = $jobsToSchedule;
+        }
 
         return;
+
     }
 
 
