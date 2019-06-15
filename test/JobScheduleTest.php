@@ -10,7 +10,6 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
     //private $jobSchedule;
 
     //ToDO
-    // 3. Test Pass in 3 jobs that do not rely on another job in a sequence and expect 3 to be returned
     // 4. Test Pass in 3 jobs: a => , b => c, c => and expect 3 jobs to be returned in the sequence a, c, b
     // 5. Test Pass in 6 jobs: a => , b => c, c => f, d => a, e => b, f => and expect f before c, c before b, b before
     //      e and a before d
@@ -69,4 +68,23 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("c", $actualJobSchedule[2], "Job in schedule should be <c>");
 
     }
+
+    // test to check 3 jobs can be added to the schedule and arrange them according to their dependencies
+    public function testArrangingThreeJobsInJobSchedule()
+    {
+        $testString = "a => 
+                       b => c
+                       c =>";
+
+        $jobSchedule = new JobSchedule($testString);
+        $jobSchedule->organiseJobSchedule();
+        $actualJobSchedule = $jobSchedule->getSchedule();
+
+        // check the value of the results and that "c" comes before "b" in the array index
+        $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
+        $this->assertEquals("c", $actualJobSchedule[1], "Job in schedule should be <c>");
+        $this->assertEquals("b", $actualJobSchedule[2], "Job in schedule should be <b>");
+        
+    }
+
 }
