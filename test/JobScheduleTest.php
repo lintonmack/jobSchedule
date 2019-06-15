@@ -79,10 +79,34 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $jobSchedule->organiseJobSchedule();
         $actualJobSchedule = $jobSchedule->getSchedule();
 
-        // check the value of the results and that "c" comes before "b" in the array index
+        // check the value of the results and that "c" comes before "b" in the schedule index
         $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
         $this->assertEquals("c", $actualJobSchedule[1], "Job in schedule should be <c>");
         $this->assertEquals("b", $actualJobSchedule[2], "Job in schedule should be <b>");
+
+    }
+
+    // test to check 6 jobs with dependencies are added to schedule in a,d ,f, c, b, e order in index
+    public function testAddAndArrangeSixJobsInJobSchedule()
+    {
+        $testString = "a =>
+                       b => c
+                       c => f
+                       d => a
+                       e => b
+                       f => ";
+
+        $jobSchedule = new JobSchedule($testString);
+        $jobSchedule->organiseJobSchedule();
+        $actualJobSchedule = $jobSchedule->getSchedule();
+
+        // check values: a, d, f, c, b, e returned in this order
+        $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
+        $this->assertEquals("d", $actualJobSchedule[1], "Job in schedule should be <d>");
+        $this->assertEquals("f", $actualJobSchedule[2], "Job in schedule should be <f>");
+        $this->assertEquals("c", $actualJobSchedule[3], "Job in schedule should be <c>");
+        $this->assertEquals("b", $actualJobSchedule[4], "Job in schedule should be <b>");
+        $this->assertEquals("e", $actualJobSchedule[5], "Job in schedule should be <e>");
 
     }
 
