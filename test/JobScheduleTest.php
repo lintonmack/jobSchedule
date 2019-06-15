@@ -10,7 +10,6 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
     //private $jobSchedule;
 
     //ToDO
-    // 4. Test Pass in 3 jobs: a => , b => c, c => and expect 3 jobs to be returned in the sequence a, c, b
     // 5. Test Pass in 6 jobs: a => , b => c, c => f, d => a, e => b, f => and expect f before c, c before b, b before
     //      e and a before d
     // 6. Test Pass in 3 jobs: a => , b => , c => c and expect an error to be thrown as a job can't rely on the sane job
@@ -84,7 +83,7 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
         $this->assertEquals("c", $actualJobSchedule[1], "Job in schedule should be <c>");
         $this->assertEquals("b", $actualJobSchedule[2], "Job in schedule should be <b>");
-        
+
     }
 
 }
