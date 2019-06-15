@@ -18,7 +18,7 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
     // 7. Test Pass in 6 jobs: a => , b => c, c => f, d => a, e => , f => b and expect an error to be thrown as a
     //      job cannot rely on circular dependencies.
 
-    //test to check an empty string returns empty job sequence
+    // test to check an empty string returns empty job sequence
     public function testEmptyStringReturnsEmptySequence()
     {
         //create new instance of jobSchedule and pass in an empty string
@@ -46,6 +46,27 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($actualJobSchedule, "data structure should be <array>");
         $this->assertEquals(1, count($actualJobSchedule), "array should have <1 element>");
         $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
+
+    }
+
+    // test to check 3 jobs that have zero dependency on one another can be added to the schedule.
+    public function testAddingThreeJobsToJobSchedule()
+    {
+        $testString = "a => 
+                       b =>
+                       c =>";
+
+        $jobSchedule = new JobSchedule($testString);
+        $jobSchedule->organiseJobSchedule();
+        $actualJobSchedule = $jobSchedule->getSchedule();
+
+        // check three elements are returned in the array.
+        $this->assertEquals(3, count($actualJobSchedule), "array should have <3 elements>");
+
+        // check the value of the results
+        $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
+        $this->assertEquals("b", $actualJobSchedule[1], "Job in schedule should be <b>");
+        $this->assertEquals("c", $actualJobSchedule[2], "Job in schedule should be <c>");
 
     }
 }
