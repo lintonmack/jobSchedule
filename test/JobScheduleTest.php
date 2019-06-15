@@ -10,7 +10,6 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
     //private $jobSchedule;
 
     //ToDO
-    // 2. Test Pass in a single job and expect a single job to be returned
     // 3. Test Pass in 3 jobs that do not rely on another job in a sequence and expect 3 to be returned
     // 4. Test Pass in 3 jobs: a => , b => c, c => and expect 3 jobs to be returned in the sequence a, c, b
     // 5. Test Pass in 6 jobs: a => , b => c, c => f, d => a, e => b, f => and expect f before c, c before b, b before
@@ -44,7 +43,7 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
         $actualJobSchedule = $jobSchedule->getSchedule();
 
         // the schedule should be an array with 1 element, which should be "a"
-        $this->assertInternalType('array',$actualJobSchedule);
+        $this->assertIsArray($actualJobSchedule, "data structure should be <array>");
         $this->assertEquals(1, count($actualJobSchedule), "array should have <1 element>");
         $this->assertEquals("a", $actualJobSchedule[0], "Job in schedule should be <a>");
 
