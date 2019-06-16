@@ -42,7 +42,8 @@ class JobSchedule
 
         // use regex to separate job letter from the string and add to the array $filteredListOfJobs
         $filteredListOfJobs = array();
-        preg_match_all("/([a-z]\s=>((\s||)([a-z]||\s)))/", $this->unorderedListOfJobs, $filteredListOfJobs);
+        preg_match_all("/([a-z]\s=>((\s||)([a-z]||\s)))/", $this->unorderedListOfJobs,
+            $filteredListOfJobs);
 
         // loop over the jobsToSchedule in the $filteredListOfJobs
 
@@ -54,6 +55,15 @@ class JobSchedule
 
             // check string length to establish if job has dependencies
             if (strlen($jobsToSchedule) > 1) {
+
+                // call validateJobs() to check validity of the jobsToSchedule
+                $areJobsValid = $this->validateJobs($jobsToSchedule);
+
+                // if jobs are invalid exit as soon as possible and return the error message
+                if ($areJobsValid !== true) {
+                    return $areJobsValid;
+                }
+
 
                 // check if and what jobs have been set in the schedule
 
@@ -88,7 +98,6 @@ class JobSchedule
                 }
             }
         }
-
         return;
 
     }
@@ -110,6 +119,26 @@ class JobSchedule
 
         // Add the final job to the schedule after the loop has finished running
         $this->schedule[] = $jobToReplace;
+
+    }
+
+    // function validateJobs() throws an error if a job sequence is invalid or returns true if is valid
+    private function validateJobs($jobsToSchedule)
+    {
+        try {
+            // check if the jobs in the sequence are equal to one another
+            if ($jobsToSchedule[0] === $jobsToSchedule[1]) {
+                // throw an error if they are equal
+                throw new Error("Error: Jobs cannot depend on themselves");
+            }
+
+        } catch (Error $e) {
+            // return the handled error to the user
+            return $e->getMessage();
+        }
+
+        // return true as jobs are valid
+        return true;
 
     }
 
