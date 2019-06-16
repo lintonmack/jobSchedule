@@ -7,8 +7,6 @@ require "../src/model/JobSchedule.php";
 
 class JobScheduleTest extends \PHPUnit\Framework\TestCase
 {
-    //private $jobSchedule;
-
     //ToDO
     // 6. Test Pass in 3 jobs: a => , b => , c => c and expect an error to be thrown as a job can't rely on the sane job
     // 7. Test Pass in 6 jobs: a => , b => c, c => f, d => a, e => , f => b and expect an error to be thrown as a
@@ -108,4 +106,20 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    // test to check a job cannot depend on itself e.g. "c => c" cannot be allowed
+    public function testAJobCantDependOnItself()
+    {
+        $testString = "a =>
+                       b => 
+                       c => c";
+
+        $jobSchedule = new JobSchedule($testString);
+
+        $throwsError = $jobSchedule->organiseJobSchedule();
+
+        // checks for the text "Error: Jobs cannot depend on themselves"
+        $this->assertEquals("Error: Jobs cannot depend on themselves", $throwsError,
+            "Message should be returned <Error: Jobs cannot depend on themselves>");
+
+    }
 }
