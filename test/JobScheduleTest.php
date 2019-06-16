@@ -122,4 +122,23 @@ class JobScheduleTest extends \PHPUnit\Framework\TestCase
             "Message should be returned <Error: Jobs cannot depend on themselves>");
 
     }
+
+    // test to check that a schedule of jobs does not contain circular dependencies
+    public function testJobScheduleForCircularDependencies()
+    {
+        $testString = "a =>
+                       b => c
+                       c => f
+                       d => a
+                       e => 
+                       f => b";
+
+        $jobSchedule = new JobSchedule($testString);
+
+        $throwsError = $jobSchedule->organiseJobSchedule();
+
+        // checks for the text "Error: Jobs cannot have circular dependencies"
+        $this->assertEquals("Error: Jobs cannot have circular dependencies", $throwsError,
+            "Message should be returned <Error: Jobs cannot have circular dependencies>");
+    }
 }
