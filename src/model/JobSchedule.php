@@ -29,9 +29,7 @@ class JobSchedule
         $this->schedule = $schedule;
     }
 
-
-    // initial declaration of organiseJobSchedule to return an empty string
-
+    // organiseJobSchedule() used to organise the jobSchedule
     public function organiseJobSchedule()
     {
         if ($this->unorderedListOfJobs === "") {
@@ -70,8 +68,7 @@ class JobSchedule
 
                 } elseif (in_array($jobsToSchedule[0], $this->schedule) && !in_array($jobsToSchedule[1],
                         $this->schedule)) {
-                    // check if the first job is in the schedule, if yes  and the second job isn't in array
-                    // get the index of the first job in the schedule
+                    // check if the first job is in the schedule second job isn't in schedule
                     $lastJobPositionReferenceKey = array_search($jobsToSchedule[0], $this->schedule);
                     // pass the job to reorganiseJobsInSchedule() and the index of where in the schedule to position it
                     $this->reorganiseJobsInSchedule($lastJobPositionReferenceKey, $jobsToSchedule[1]);
@@ -92,6 +89,7 @@ class JobSchedule
                 // else if job has no dependencies and isn't in the schedule then add it to the schedule
                 if (!in_array($jobsToSchedule, $this->schedule)) {
                     $this->schedule[] = $jobsToSchedule;
+
                 }
             }
         }
@@ -133,8 +131,7 @@ class JobSchedule
                 $jobOneSchedulePosition = array_search($jobsToSchedule[0], $this->schedule);
                 $jobTwoSchedulePosition = array_search($jobsToSchedule[1], $this->schedule);
 
-                // If the dependency is in a higher position in the schedule than the job it depends on and the
-                // difference in index position is greater than +1, throw an error
+                // If the dependency is higher in the schedule than the job it depends on and the index position is  > 1
                 if (($jobOneSchedulePosition < $jobTwoSchedulePosition) &&
                     ($jobTwoSchedulePosition - $jobOneSchedulePosition > 1)) {
                     throw new Error("Error: Jobs cannot have circular dependencies");
@@ -143,11 +140,9 @@ class JobSchedule
             }
 
         } catch (Error $e) {
-            // return the handled error to the user
             return $e->getMessage();
         }
 
-        // return true as jobs are valid
         return true;
 
     }

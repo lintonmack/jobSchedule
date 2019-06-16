@@ -1,10 +1,12 @@
 <?php
 
 // include the JobSchedule class
+use PHPUnit\Framework\TestCase;
+
 require "../src/model/JobSchedule.php";
 
 //create a new test class for Job schedule
-class JobScheduleTest extends \PHPUnit\Framework\TestCase
+class JobScheduleTest extends TestCase
 {
 
     // test to check an empty string returns empty job sequence
