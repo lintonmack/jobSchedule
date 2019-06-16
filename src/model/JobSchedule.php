@@ -4,9 +4,7 @@
 class JobSchedule
 {
 
-    // Instance variables declared
     //$schedule is the final ordered list of jobs. $unorderedListOfJobs is the unsorted string of jobs.
-
     private $schedule = array();
     private $unorderedListOfJobs = "";
 
@@ -38,6 +36,7 @@ class JobSchedule
     {
         if ($this->unorderedListOfJobs === "") {
             return;
+
         }
 
         // use regex to separate job letter from the string and add to the array $filteredListOfJobs
@@ -62,19 +61,16 @@ class JobSchedule
                 // if jobs are invalid exit as soon as possible and return the error message
                 if ($areJobsValid !== true) {
                     return $areJobsValid;
+
                 }
-
-
-                // check if and what jobs have been set in the schedule
-
                 // add the job it depends on ahead of the first job char in the string
                 if (!in_array($jobsToSchedule[0], $this->schedule) && !in_array($jobsToSchedule[1], $this->schedule)) {
                     $this->schedule[] = $jobsToSchedule[1];
                     $this->schedule[] = $jobsToSchedule[0];
 
-                    // check if the first job is in the schedule, if yes  and the second job isn't in array
                 } elseif (in_array($jobsToSchedule[0], $this->schedule) && !in_array($jobsToSchedule[1],
                         $this->schedule)) {
+                    // check if the first job is in the schedule, if yes  and the second job isn't in array
                     // get the index of the first job in the schedule
                     $lastJobPositionReferenceKey = array_search($jobsToSchedule[0], $this->schedule);
                     // pass the job to reorganiseJobsInSchedule() and the index of where in the schedule to position it
@@ -89,6 +85,7 @@ class JobSchedule
                     $lastJobPositionReferenceKey += 1;
                     // pass the job to reorganiseJobsInSchedule() and the position to add it to in the schedule
                     $this->reorganiseJobsInSchedule($lastJobPositionReferenceKey, $jobsToSchedule[0]);
+
                 }
 
             } else {
@@ -119,7 +116,7 @@ class JobSchedule
 
         // Add the final job to the schedule after the loop has finished running
         $this->schedule[] = $jobToReplace;
-
+        return;
     }
 
     // function validateJobs() throws an error if a job sequence is invalid or returns true if is valid
@@ -130,6 +127,19 @@ class JobSchedule
             if ($jobsToSchedule[0] === $jobsToSchedule[1]) {
                 // throw an error if they are equal
                 throw new Error("Error: Jobs cannot depend on themselves");
+                // else if check if both jobs are already in the schedule
+            } elseif (in_array($jobsToSchedule[0], $this->schedule) && in_array($jobsToSchedule[1], $this->schedule)) {
+                // get the position of the jobs in the schedule
+                $jobOneSchedulePosition = array_search($jobsToSchedule[0], $this->schedule);
+                $jobTwoSchedulePosition = array_search($jobsToSchedule[1], $this->schedule);
+
+                // If the dependency is in a higher position in the schedule than the job it depends on and the
+                // difference in index position is greater than +1, throw an error
+                if (($jobOneSchedulePosition < $jobTwoSchedulePosition) &&
+                    ($jobTwoSchedulePosition - $jobOneSchedulePosition > 1)) {
+                    throw new Error("Error: Jobs cannot have circular dependencies");
+
+                }
             }
 
         } catch (Error $e) {
