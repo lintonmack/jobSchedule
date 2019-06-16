@@ -1,9 +1,7 @@
 <?php
 
-
 class JobSchedule
 {
-
     //$schedule is the final ordered list of jobs. $unorderedListOfJobs is the unsorted string of jobs.
     private $schedule = array();
     private $unorderedListOfJobs = "";
@@ -11,6 +9,7 @@ class JobSchedule
     public function __construct($unorderedListOfJobs)
     {
         $this->unorderedListOfJobs = $unorderedListOfJobs;
+
     }
 
     /**
@@ -19,14 +18,7 @@ class JobSchedule
     public function getSchedule()
     {
         return $this->schedule;
-    }
 
-    /**
-     * @param array $schedule
-     */
-    public function setSchedule($schedule)
-    {
-        $this->schedule = $schedule;
     }
 
     // organiseJobSchedule() used to organise the jobSchedule
@@ -93,6 +85,7 @@ class JobSchedule
                 }
             }
         }
+
         return;
 
     }
@@ -110,6 +103,7 @@ class JobSchedule
             $this->schedule[$i] = $jobToReplace;
             // add the copy of the previous job to the $jobsToReplace for the next time the loop runs
             $jobToReplace = $currentJob;
+
         }
 
         // Add the final job to the schedule after the loop has finished running
@@ -125,6 +119,7 @@ class JobSchedule
             if ($jobsToSchedule[0] === $jobsToSchedule[1]) {
                 // throw an error if they are equal
                 throw new Error("Error: Jobs cannot depend on themselves");
+
                 // else if check if both jobs are already in the schedule
             } elseif (in_array($jobsToSchedule[0], $this->schedule) && in_array($jobsToSchedule[1], $this->schedule)) {
                 // get the position of the jobs in the schedule
@@ -137,15 +132,15 @@ class JobSchedule
                     throw new Error("Error: Jobs cannot have circular dependencies");
 
                 }
+
             }
 
         } catch (Error $e) {
             return $e->getMessage();
+
         }
 
         return true;
-
     }
-
 
 }
